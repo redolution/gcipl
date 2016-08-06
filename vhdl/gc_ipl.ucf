@@ -1,0 +1,21 @@
+NET exi_do_phy[0] LOC = P42;
+NET exi_do_phy[1] LOC = P41;
+NET exi_do_phy[2] LOC = P40;
+NET exi_do_phy[3] LOC = P39;
+NET exi_di LOC = P43;
+NET exi_di BUFG = DATA_GATE;
+NET exi_cs LOC = P38;
+NET exi_clk LOC = P44;
+
+# Flash
+NET f_miso LOC = P33;
+NET f_mosi_phy LOC = P34;
+NET f_cs_phy LOC = P32;
+NET f_sck LOC = P36;
+
+# ATmega SPI master
+NET at_miso LOC = P16;
+NET at_mosi LOC = P14;
+NET at_cs LOC = P12;
+NET at_clk LOC = P13;
+
