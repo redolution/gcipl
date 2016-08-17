@@ -22,7 +22,7 @@ TARGET = $(OBJDIR)/gcipl
 SRCDIR = src
 SRC = $(wildcard $(SRCDIR)/*.c) $(LUFA_SRC_USB)
 LUFA_PATH = lufa/LUFA
-CC_FLAGS = -Wno-strict-prototypes -DUSE_LUFA_CONFIG_HEADER -Isrc/config -flto
+CC_FLAGS = -Wno-strict-prototypes -DUSE_LUFA_CONFIG_HEADER -I$(SRCDIR) -I$(SRCDIR)/config -flto
 LD_FLAGS = -flto
 
 # Default target
