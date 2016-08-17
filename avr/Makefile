@@ -17,10 +17,12 @@ BOARD = NONE
 F_CPU = 8000000
 F_USB = $(F_CPU)
 OPTIMIZATION = s
-TARGET = gcipl
-SRC = $(TARGET).c descriptors.c $(LUFA_SRC_USB)
+OBJDIR = build
+TARGET = $(OBJDIR)/gcipl
+SRCDIR = src
+SRC = $(wildcard $(SRCDIR)/*.c) $(LUFA_SRC_USB)
 LUFA_PATH = lufa/LUFA
-CC_FLAGS = -Wno-strict-prototypes -DUSE_LUFA_CONFIG_HEADER -Iconfig -flto
+CC_FLAGS = -Wno-strict-prototypes -DUSE_LUFA_CONFIG_HEADER -Isrc/config -flto
 LD_FLAGS = -flto
 
 # Default target
