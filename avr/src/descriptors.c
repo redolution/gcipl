@@ -99,7 +99,7 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =
         .InterfaceNumber = INTERFACE_ID_Vendor,
         .AlternateSetting = 0,
 
-        .TotalEndpoints = 2,
+        .TotalEndpoints = 3,
 
         .Class = 0xFF,
         .SubClass = 0xFF,
@@ -134,7 +134,21 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =
         .Attributes = (EP_TYPE_BULK | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
         .EndpointSize = VENDOR_IO_EPSIZE,
         .PollingIntervalMS = 0x05
-    }
+    },
+
+    .Vendor_DebugInEndpoint =
+    {
+        .Header =
+        {
+            .Size = sizeof(USB_Descriptor_Endpoint_t),
+            .Type = DTYPE_Endpoint
+        },
+
+        .EndpointAddress = VENDOR_DEBUG_IN_EPADDR,
+        .Attributes = (EP_TYPE_BULK | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
+        .EndpointSize = VENDOR_IO_EPSIZE,
+        .PollingIntervalMS = 0x05
+    },
 };
 
 /* Language descriptor structure. This descriptor, located in FLASH memory, is returned when the
