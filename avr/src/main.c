@@ -30,6 +30,10 @@ int main()
 
     while (1)
     {
+        Endpoint_SelectEndpoint(VENDOR_IN_EPADDR);
+        Endpoint_Write_Stream_LE(hello, sizeof(hello), NULL);
+        Endpoint_ClearIN();
+
         Endpoint_SelectEndpoint(VENDOR_DEBUG_IN_EPADDR);
         Endpoint_Write_Stream_LE(hello, sizeof(hello), NULL);
         Endpoint_ClearIN();
@@ -40,9 +44,20 @@ void EVENT_USB_Device_ConfigurationChanged()
 {
     bool ConfigSuccess = true;
 
-    ConfigSuccess &= Endpoint_ConfigureEndpoint(VENDOR_IN_EPADDR, EP_TYPE_BULK, VENDOR_IO_EPSIZE, 1);
-    ConfigSuccess &= Endpoint_ConfigureEndpoint(VENDOR_OUT_EPADDR, EP_TYPE_BULK, VENDOR_IO_EPSIZE, 1);
-    ConfigSuccess &= Endpoint_ConfigureEndpoint(VENDOR_DEBUG_IN_EPADDR, EP_TYPE_BULK, VENDOR_IO_EPSIZE, 1);
+    ConfigSuccess &= Endpoint_ConfigureEndpoint(VENDOR_IN_EPADDR,
+            EP_TYPE_BULK,
+            VENDOR_IO_EPSIZE,
+            1);
+
+    ConfigSuccess &= Endpoint_ConfigureEndpoint(VENDOR_OUT_EPADDR,
+            EP_TYPE_BULK,
+            VENDOR_IO_EPSIZE,
+            1);
+
+    ConfigSuccess &= Endpoint_ConfigureEndpoint(VENDOR_DEBUG_IN_EPADDR,
+            EP_TYPE_BULK,
+            VENDOR_IO_EPSIZE,
+            1);
 }
 
 void EVENT_USB_Device_ControlRequest()

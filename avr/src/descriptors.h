@@ -35,7 +35,7 @@
 #define VENDOR_IN_EPADDR (ENDPOINT_DIR_IN | 1)
 
 /** Endpoint address of the Bulk Vendor host-to-device data OUT endpoint. */
-#define VENDOR_OUT_EPADDR (ENDPOINT_DIR_OUT | 1)
+#define VENDOR_OUT_EPADDR (ENDPOINT_DIR_OUT | 3)
 
 /** Endpoint address of the Bulk Vendor device-to-host debug IN endpoint. */
 #define VENDOR_DEBUG_IN_EPADDR (ENDPOINT_DIR_IN | 2)
