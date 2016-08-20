@@ -27,10 +27,6 @@ void bl_jump_check()
 
 void bootloader_reset()
 {
-    // If USB is used, detach from the bus and reset it
-    USB_Disable();
-    // Disable all interrupts
-    cli();
     // Set the bootloader key to the magic value and force a reset
     boot_key = MAGIC_BOOT_KEY;
     wdt_enable(WDTO_15MS);

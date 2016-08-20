@@ -29,9 +29,10 @@ LD_FLAGS = -flto
 all:
 
 program: $(TARGET).hex
-	sudo dfu-programmer $(MCU) erase
-	sudo dfu-programmer $(MCU) flash $(TARGET).hex
-	sudo dfu-programmer $(MCU) launch
+	../client/build/iplc bootloader
+	dfu-programmer $(MCU) erase
+	dfu-programmer $(MCU) flash $(TARGET).hex
+	dfu-programmer $(MCU) launch
 
 # Include LUFA build script makefiles
 include $(LUFA_PATH)/Build/lufa_core.mk

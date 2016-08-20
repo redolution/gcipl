@@ -65,6 +65,8 @@ void EVENT_USB_Device_ControlRequest()
     switch (USB_ControlRequest.bRequest)
     {
         case REQ_Bootloader:
+            Endpoint_ClearSETUP();
+            Endpoint_ClearStatusStage();
             bootloader_reset();
     }
 }
