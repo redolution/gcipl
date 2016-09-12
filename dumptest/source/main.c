@@ -28,7 +28,7 @@ static u32 read_rom(void *buf, u32 len, u32 offset)
     if (EXI_Lock(EXI_CHANNEL_0, EXI_DEVICE_1, NULL) == 0)
         return 0;
 
-    if (EXI_Select(EXI_CHANNEL_0, EXI_DEVICE_1, EXI_SPEED32MHZ) == 0)
+    if (EXI_Select(EXI_CHANNEL_0, EXI_DEVICE_1, EXI_SPEED8MHZ) == 0)
     {
         EXI_Unlock(EXI_CHANNEL_0);
         return 0;
@@ -65,7 +65,7 @@ void SYS_ReadROM(void *buf, u32 len, u32 offset)
     while (len > 0)
     {
         cpy_cnt = (len > 256) ? 256 : len;
-        while(read_rom(buf, cpy_cnt, offset) == 0);
+        (read_rom(buf, cpy_cnt, offset) == 0);
         offset += cpy_cnt;
         buf += cpy_cnt;
         len -= cpy_cnt;
@@ -138,6 +138,10 @@ int main()
 
     while (1)
     {
+        printf("\nReading %d first bytes of IPL ROM\n", BYTES_TO_READ);
+        SYS_ReadROM(ipl_buffer, BYTES_TO_READ, 0);
+        DumpHex(ipl_buffer, BYTES_TO_READ);
+
         int buttonsDown = 0;
         while ((buttonsDown & PAD_BUTTON_A) == 0)
         {
@@ -146,9 +150,5 @@ int main()
 
             buttonsDown = PAD_ButtonsDown(0);
         }
-
-        printf("\nReading %d first bytes of IPL ROM\n", BYTES_TO_READ);
-        SYS_ReadROM(ipl_buffer, BYTES_TO_READ, 0);
-        DumpHex(ipl_buffer, BYTES_TO_READ);
     }
 }

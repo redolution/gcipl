@@ -72,7 +72,7 @@ begin
             -- Default idle state
             at_miso <= 'Z';
             exi_do_phy <= (others => 'Z');
-            f_sck <= exi_clk;
+            f_sck <= not exi_clk;
             f_mosi_phy <= 'Z';
             f_cs_phy <= '1';
         elsif (passthrough = '1')
@@ -87,7 +87,7 @@ begin
             -- We control flash
             at_miso <= 'Z';
             exi_do_phy <= (others => 'Z'); -- No data output to EXI while we control flash
-            f_sck <= exi_clk;
+            f_sck <= not exi_clk;
             f_mosi_phy <= f_mosi;
             f_cs_phy <= f_cs;
         end if;
@@ -98,6 +98,7 @@ begin
         if (exi_cs = '1')
         then
             cancel <= '0';
+            passthrough <= '0';
             exi_count <= 0;
 
         -- Do our shit on clock rising edge (host does its stuff on falling edge)
@@ -243,31 +244,18 @@ begin
                     when 31 =>
                         f_mosi <= exi_buffer(5);
                         --exi_buffer(5) <= exi_di;
+
+                        -- Enable passthrough mode now
+                        -- If the GameCube was trying to write, flash is deselected so it
+                        -- will be selected on the next clock cycle allowing arbitrary
+                        -- commands
+                        passthrough <= '1';
                 end case;
 
                 exi_count <= exi_count + 1;
             end if;
         end if;
     end process;
-
-    process (exi_clk, exi_cs)
-    begin
-        if (exi_cs = '1')
-        then
-            passthrough <= '0';
-        elsif (falling_edge(exi_clk))
-        then
-            if (exi_count = 31)
-            then
-                -- Enable passthrough mode now
-                -- If the GameCube was trying to write, flash is deselected so it
-                -- will be selected on the next clock cycle allowing arbitrary
-                -- commands
-                passthrough <= '1';
-            end if;
-        end if;
-    end process;
-
 
 end Behavioral;
 
