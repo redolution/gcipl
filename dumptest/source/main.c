@@ -10,6 +10,8 @@
 #include <ogc/video.h>
 #include <ogc/system.h>
 
+void usbload_main();
+
 #define BYTES_TO_READ 256
 
 static void *xfb = NULL;
@@ -147,8 +149,10 @@ int main()
         {
             VIDEO_WaitVSync();
             PAD_ScanPads();
-
             buttonsDown = PAD_ButtonsDown(0);
+
+            if (buttonsDown & PAD_BUTTON_START)
+                usbload_main();
         }
     }
 }
