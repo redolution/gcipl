@@ -24,11 +24,12 @@ architecture Behavioral of gc_ipl is
     );
     signal state : state_t;
 
-    signal outbuf : std_logic_vector(4 downto 0);
+    signal outbuf : std_logic_vector(5 downto 0);
     signal bits : integer range 0 to 31;
 begin
     f_clk <= 'Z'; -- This pin needs to go, clock should be routed directly on the PCB
     f_cs <= exi_cs when (state = translate or state = passthrough) else '1';
+    f_mosi <= outbuf(5) when state = translate else exi_mosi;
     exi_miso <= (others => f_miso) when (state /= ignore and exi_cs = '0') else (others => 'Z');
 
     process (exi_cs, exi_clk)
@@ -37,17 +38,15 @@ begin
             state <= translate;
             outbuf <= (others => '0');
             bits <= 0;
-            f_mosi <= '0';
         elsif rising_edge(exi_clk) then
             case state is
                 when translate | passthrough_wait =>
-                    f_mosi <= outbuf(4);
-                    outbuf <= outbuf(3 downto 0) & exi_mosi;
+                    outbuf <= outbuf(4 downto 0) & exi_mosi;
                     bits <= bits + 1;
 
                     case bits is
                         when 0 =>
-                            outbuf <= outbuf(3 downto 0) & '1';
+                            outbuf <= outbuf(4 downto 0) & '1';
                             -- When writing, temporarily deselect flash
                             -- It will be reselected later on, so that raw commands can be issued
                             if exi_mosi = '1' then
@@ -55,7 +54,7 @@ begin
                             end if;
 
                         when 1 =>
-                            outbuf <= outbuf(3 downto 0) & '1';
+                            outbuf <= outbuf(4 downto 0) & '1';
 
                         when 2 | 3 | 4 | 5 | 6 | 7 =>
                             -- Flash is only 512KB, no point in overriding accesses higher than that
@@ -72,7 +71,7 @@ begin
                     end case;
 
                 when passthrough =>
-                    f_mosi <= exi_mosi;
+                    null;
 
                 when ignore =>
                     null;
