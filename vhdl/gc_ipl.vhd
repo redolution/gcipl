@@ -56,7 +56,7 @@ begin
                         when 1 =>
                             outbuf <= outbuf(4 downto 0) & '1';
 
-                        when 2 | 3 | 4 | 5 | 6 | 7 =>
+                        when 2 | 3 | 4 | 5 | 6 =>
                             -- Flash is only 512KB, no point in overriding accesses higher than that
                             -- Let it all fall through to the IPL ROM (for fonts) and other peripherals
                             if exi_mosi = '1' then
