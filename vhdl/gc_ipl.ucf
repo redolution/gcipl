@@ -2,10 +2,9 @@ NET exi_miso[0] LOC = P42;
 NET exi_miso[1] LOC = P41;
 NET exi_miso[2] LOC = P40;
 NET exi_miso[3] LOC = P39;
-NET exi_mosi LOC = P43;
-NET exi_mosi BUFG = DATA_GATE;
+NET exi_mosi LOC = P43 | BUFG = DATA_GATE;
 NET exi_cs LOC = P38;
-NET exi_clk LOC = P44;
+NET exi_clk LOC = P44 | BUFG = CLK;
 
 # Flash
 NET f_miso LOC = P33;
