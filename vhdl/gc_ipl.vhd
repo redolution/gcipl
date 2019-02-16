@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 
 entity gc_ipl is
     port (
-        exi_miso : out std_logic;
+        exi_miso : out std_logic_vector(3 downto 0);
         exi_mosi : in std_logic;
         exi_cs : in std_logic;
         exi_clk : in std_logic;
@@ -29,7 +29,7 @@ architecture Behavioral of gc_ipl is
 begin
     f_clk <= 'Z'; -- This pin needs to go, clock should be routed directly on the PCB
     f_cs <= exi_cs when (state = translate or state = passthrough) else '1';
-    exi_miso <= f_miso when (state /= ignore and exi_cs = '0') else 'Z';
+    exi_miso <= (others => f_miso) when (state /= ignore and exi_cs = '0') else (others => 'Z');
 
     process (exi_cs, exi_clk)
     begin
