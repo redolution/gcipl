@@ -45,7 +45,7 @@ endif
 .PHONY: all clean run
 .SECONDARY:
 
-all: $(OUT)/$(TOPLEVEL).xsvf
+jed: $(OUT)/$(TOPLEVEL).jed
 
 %.prj: $(SOURCES)
 	$(E) "  PRJ      $@"
