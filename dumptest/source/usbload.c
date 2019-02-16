@@ -31,7 +31,7 @@
 #include <ogc/usbgecko.h>
 #include "sidestep.h"
 
-#define GECKO_CHANNEL 1
+#define GECKO_CHANNEL 0
 #define PC_READY 0x80
 #define PC_OK    0x81
 #define GC_READY 0x88
