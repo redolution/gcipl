@@ -20,31 +20,37 @@ architecture Behavioral of gc_ipl is
         translate,
         passthrough_wait,
         passthrough,
-        ignore
+        ignore,
+        disable
     );
     signal state : state_t;
 
     signal outbuf : std_logic_vector(5 downto 0);
     signal zero : std_logic;
+    signal one : std_logic;
     signal bits : integer range 0 to 31;
 begin
     f_clk <= 'Z'; -- This pin needs to go, clock should be routed directly on the PCB
     f_cs <= exi_cs when (state = translate or state = passthrough) else '1';
     f_mosi <= outbuf(5) when state = translate else exi_mosi;
-    exi_miso <= (others => f_miso) when (state /= ignore and exi_cs = '0') else (others => 'Z');
+    exi_miso <= (others => f_miso) when (state /= ignore and state /= disable and exi_cs = '0') else (others => 'Z');
 
-    process (exi_cs, exi_clk)
+    process (exi_cs, exi_clk, state)
     begin
         if exi_cs = '1' then
-            state <= translate;
+            if state /= disable then
+                state <= translate;
+            end if;
             outbuf <= (others => '0');
             zero <= '0';
+            one <= '1';
             bits <= 0;
         elsif rising_edge(exi_clk) then
             case state is
                 when translate | passthrough_wait =>
                     outbuf <= outbuf(4 downto 0) & exi_mosi;
                     zero <= zero or exi_mosi;
+                    one <= one and exi_mosi;
                     bits <= bits + 1;
 
                     case bits is
@@ -72,6 +78,10 @@ begin
                                 state <= ignore;
                             end if;
 
+                            if one = '1' then
+                                state <= disable;
+                            end if;
+
                         when 31 =>
                             state <= passthrough;
 
@@ -82,7 +92,7 @@ begin
                 when passthrough =>
                     null;
 
-                when ignore =>
+                when ignore | disable =>
                     null;
             end case;
         end if;
