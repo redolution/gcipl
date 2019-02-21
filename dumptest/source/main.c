@@ -27,34 +27,34 @@ static u32 read_rom(void *buf, u32 len, u32 offset)
 
     DCInvalidateRange(buf, len);
 
-    if (EXI_Lock(EXI_CHANNEL_1, EXI_DEVICE_0, NULL) == 0)
+    if (EXI_Lock(EXI_CHANNEL_0, EXI_DEVICE_1, NULL) == 0)
         return 0;
 
-    if (EXI_Select(EXI_CHANNEL_1, EXI_DEVICE_0, EXI_SPEED32MHZ) == 0)
+    if (EXI_Select(EXI_CHANNEL_0, EXI_DEVICE_1, EXI_SPEED8MHZ) == 0)
     {
-        EXI_Unlock(EXI_CHANNEL_1);
+        EXI_Unlock(EXI_CHANNEL_0);
         return 0;
     }
 
     ret = 0;
     loff = offset << 6;
 
-    if (EXI_Imm(EXI_CHANNEL_1, &loff, 4, EXI_WRITE, NULL) == 0)
+    if (EXI_Imm(EXI_CHANNEL_0, &loff, 4, EXI_WRITE, NULL) == 0)
         ret |= 0x0001;
 
-    if (EXI_Sync(EXI_CHANNEL_1) == 0)
+    if (EXI_Sync(EXI_CHANNEL_0) == 0)
         ret |= 0x0002;
 
-    if (EXI_Dma(EXI_CHANNEL_1, buf, len, EXI_READ, NULL) == 0)
+    if (EXI_Dma(EXI_CHANNEL_0, buf, len, EXI_READ, NULL) == 0)
         ret |= 0x0004;
 
-    if (EXI_Sync(EXI_CHANNEL_1) == 0)
+    if (EXI_Sync(EXI_CHANNEL_0) == 0)
         ret |= 0x0008;
 
-    if (EXI_Deselect(EXI_CHANNEL_1) == 0)
+    if (EXI_Deselect(EXI_CHANNEL_0) == 0)
         ret |= 0x0010;
 
-    if (EXI_Unlock(EXI_CHANNEL_1) == 0)
+    if (EXI_Unlock(EXI_CHANNEL_0) == 0)
         ret |= 0x00020;
 
     return ret != 0;
