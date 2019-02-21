@@ -37,14 +37,8 @@ static u32 read_rom(void *buf, u32 len, u32 offset)
     }
 
     ret = 0;
-    loff = 0x80000000;
-    if (EXI_Imm(EXI_CHANNEL_1, &loff, 4, EXI_WRITE, NULL) == 0)
-        ret |= 0x0001;
+    loff = offset << 6;
 
-    if (EXI_Sync(EXI_CHANNEL_1) == 0)
-        ret |= 0x0002;
-
-    loff = 0x03 << 24 | offset;
     if (EXI_Imm(EXI_CHANNEL_1, &loff, 4, EXI_WRITE, NULL) == 0)
         ret |= 0x0001;
 
