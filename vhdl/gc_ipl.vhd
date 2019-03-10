@@ -73,12 +73,13 @@ begin
                                 state <= ignore_wait;
                             end if;
 
-                        when 26 =>
-                            -- Ignore reads from address 0, to allow Swiss to read the copyright/version string
+                        when 15 =>
+                            -- Ignore reads below 0x800, we don't provide a BS1
                             if zero = '0' then
                                 state <= ignore;
                             end if;
 
+                        when 26 =>
                             if state = ignore_wait then
                                 state <= ignore;
                             end if;
