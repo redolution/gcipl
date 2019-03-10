@@ -55,7 +55,7 @@ begin
 
                     case bits is
                         when 0 =>
-                            outbuf <= outbuf(4 downto 0) & '1';
+                            outbuf(0) <= '1';
                             -- When writing, temporarily deselect flash
                             -- It will be reselected later on, so that raw commands can be issued
                             if exi_mosi = '1' then
@@ -63,7 +63,7 @@ begin
                             end if;
 
                         when 1 =>
-                            outbuf <= outbuf(4 downto 0) & '1';
+                            outbuf(0) <= '1';
 
                         when 2 | 3 | 4 | 5 | 6 =>
                             -- Flash is only 512KB, no point in overriding accesses higher than that
