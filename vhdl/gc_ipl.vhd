@@ -20,6 +20,7 @@ architecture Behavioral of gc_ipl is
         translate,
         passthrough_wait,
         passthrough,
+        ignore_wait,
         ignore,
         disable
     );
@@ -47,7 +48,7 @@ begin
             bits <= 0;
         elsif rising_edge(exi_clk) then
             case state is
-                when translate | passthrough_wait =>
+                when translate | passthrough_wait | ignore_wait =>
                     outbuf <= outbuf(4 downto 0) & exi_mosi;
                     zero <= zero or exi_mosi;
                     one <= one and exi_mosi;
@@ -69,12 +70,16 @@ begin
                             -- Flash is only 512KB, no point in overriding accesses higher than that
                             -- Let it all fall through to the IPL ROM (for fonts) and other peripherals
                             if exi_mosi = '1' then
-                                state <= ignore;
+                                state <= ignore_wait;
                             end if;
 
                         when 26 =>
                             -- Ignore reads from address 0, to allow Swiss to read the copyright/version string
                             if zero = '0' then
+                                state <= ignore;
+                            end if;
+
+                            if state = ignore_wait then
                                 state <= ignore;
                             end if;
 
